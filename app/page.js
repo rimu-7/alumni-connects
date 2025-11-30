@@ -178,7 +178,7 @@ export default function AlumniRegistrationForm() {
                     onChange={handleFileChange}
                     className="hidden"
                   />
-                  <span className="text-xs md:text-sm text-gray-500 text-center sm:text-left">JPEG, PNG, WebP (সর্বোচ্চ ৫MB)</span>
+                  <span className="text-xs md:text-sm text-gray-500 text-center sm:text-left">JPEG, PNG, WebP (সর্বোচ্চ 2MB)</span>
                 </div>
                 <p className="text-xs text-gray-500">
                   একটি পেশাদার প্রোফাইল ছবি আপনাকে সহজে চেনাতে সাহায্য করবে। 
