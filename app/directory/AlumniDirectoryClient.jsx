@@ -70,7 +70,7 @@ export default function AlumniDirectoryClient({
         {/* Header & Search */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-200">
           <div className="w-full md:w-auto text-center md:text-left">
-              <School className="md:hidden sm:inline w-10 h-10 text-center mx-auto sm:w-8 sm:h-8 text-red-500" />
+            <School className="md:hidden sm:inline w-10 h-10 text-center mx-auto sm:w-8 sm:h-8 text-red-500" />
             <h1 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center justify-center md:justify-start gap-2 sm:gap-3">
               <School className="hidden md:inline w-6 h-6 sm:w-8 sm:h-8 text-red-500" />
               বাঁশগ্রাম হাইস্কুল অ্যালামনাই ডিরেক্টরি
@@ -242,6 +242,16 @@ export default function AlumniDirectoryClient({
                               : "Email"}
                           </button>
                         )}
+                        <div className="">
+                          {alum.bloodGroup && (
+                            <div className="flex flex-col items-end gap-1">
+                              <span className="px-2.5 py-1 bg-gradient-to-r from-red-50 to-pink-50 text-red-600 text-xs font-bold rounded-full flex items-center gap-1 border border-red-100 shadow-sm">
+                                <Heart className="w-3 h-3 fill-current" />
+                                {alum.bloodGroup}
+                              </span>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -287,7 +297,7 @@ export default function AlumniDirectoryClient({
 
                     {/* Name and Batch Info for Desktop */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors truncate">
+                      <h3 className="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors truncate">
                         {alum.fullName}
                       </h3>
                       {alum.passingYear && (
