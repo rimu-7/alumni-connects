@@ -1,48 +1,16 @@
-import axios from "axios";
 import AlumniDirectoryClient from "./AlumniDirectoryClient";
+import { getAlumniList } from "@/lib/alumni";
 
-export const dynamic = "force-dynamic";
+// Revalidate page in background every 60s, or instantly via revalidatePath('/directory') on new submissions
+export const revalidate = 60;
 
-async function getAlumniFromApi() {
-  try {
-    // Use relative URL for API calls in the same app
-    const baseUrl = process.env.NEXTAUTH_URL;
-    
-    const res = await axios.get(`${baseUrl}/api/alumni`, {
-      timeout: 10000, // 10 second timeout
-      headers: { 
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.data || !res.data.success) {
-      console.error("API response not successful:", res.data);
-      return {
-        alumni: [],
-        error: "Failed to load alumni data from server.",
-      };
-    }
-
-    return {
-      alumni: res.data.data || [],
-      error: null,
-    };
-  } catch (error) {
-    console.error("Error fetching alumni from API:", {
-      message: error.message,
-      status: error.response?.status,
-      data: error.response?.data
-    });
-    
-    return {
-      alumni: [],
-      error: error.response?.data?.error || "Unable to load alumni directory. Please try again later.",
-    };
-  }
-}
+export const metadata = {
+  title: "অ্যালামনাই ডিরেক্টরি | বাঁশগ্রাম হাইস্কুল",
+  description: "বাঁশগ্রাম উচ্চ বিদ্যালয়ের সকল প্রাক্তন শিক্ষার্থীদের তালিকা ও যোগাযোগের তথ্য।",
+};
 
 export default async function AlumniDirectoryPage() {
-  const { alumni, error } = await getAlumniFromApi();
+  const { alumni, error } = await getAlumniList({ limit: 1000 });
 
   return <AlumniDirectoryClient initialAlumni={alumni} initialError={error} />;
 }

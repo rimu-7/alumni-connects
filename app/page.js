@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Upload,
   X,
@@ -13,6 +14,12 @@ import {
   Phone,
   Mail,
   AlertCircle,
+  Users,
+  CheckCircle2,
+  Sparkles,
+  ArrowRight,
+  School,
+  Heart,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,6 +27,7 @@ export default function AlumniRegistrationForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -50,14 +58,12 @@ export default function AlumniRegistrationForm() {
         "image/webp",
       ];
       if (!allowedTypes.includes(file.type)) {
-        toast.error(
-          "দয়া করে একটি বৈধ ছবির ফাইল নির্বাচন করুন (JPEG, PNG, WebP)"
-        );
+        toast.error("দয়া করে একটি বৈধ ছবির ফাইল নির্বাচন করুন (JPEG, PNG, WebP)");
         return;
       }
 
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error("ফাইলের সাইজ 2MB এর কম হতে হবে");
+      if (file.size > 3 * 1024 * 1024) {
+        toast.error("ফাইলের সাইজ 3MB এর কম হতে হবে");
         return;
       }
 
@@ -84,7 +90,7 @@ export default function AlumniRegistrationForm() {
       });
 
       const fileInput = document.getElementById("photo");
-      if (fileInput.files[0]) {
+      if (fileInput && fileInput.files[0]) {
         submitData.append("photo", fileInput.files[0]);
       }
 
@@ -97,6 +103,7 @@ export default function AlumniRegistrationForm() {
 
       if (result.success) {
         toast.success(result.message || "রেজিস্ট্রেশন সফল হয়েছে!");
+        setIsSuccess(true);
         setFormData({
           fullName: "",
           email: "",
@@ -112,8 +119,7 @@ export default function AlumniRegistrationForm() {
         router.refresh();
       } else {
         toast.error(
-          result.error ||
-            "রেজিস্ট্রেশন ব্যর্থ হয়েছে। দয়া করে আবার চেষ্টা করুন।"
+          result.error || "রেজিস্ট্রেশন ব্যর্থ হয়েছে। দয়া করে আবার চেষ্টা করুন।"
         );
       }
     } catch (error) {
@@ -125,325 +131,328 @@ export default function AlumniRegistrationForm() {
   };
 
   return (
-    <div className="max-w-4xl my-10 mx-auto bg-white rounded-lg md:rounded-2xl shadow-sm border border-gray-200 p-4 md:p-6">
-      {/* Header Section with Instructions */}
-      <div className="bg-linear-to-r mx-auto flex flex-col items-center justify-center from-red-50 to-orange-50 rounded-lg md:rounded-xl p-4 md:p-6 mb-6 md:mb-8 border border-red-100">
-        <div className="">
-          <BookOpen className="w-15 h-15 md:w-25 md:h-25 mx-auto text-red-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 flex items-center gap-2">
-            বাঁশগ্রাম হাইস্কুল অ্যালামনাই ডিরেক্টরিতে যোগ দিন
-          </h2>
-        </div>
-       
+    <div className="max-w-4xl my-6 sm:my-10 mx-auto px-4 sm:px-6">
+      {/* Hero Header */}
+      <div className="relative bg-gradient-to-r from-red-600 via-red-500 to-amber-500 rounded-3xl p-6 sm:p-10 mb-6 sm:mb-8 text-white shadow-lg overflow-hidden">
+        {/* Glow circles */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/10 rounded-full blur-xl pointer-events-none" />
 
-        <div className="space-y-2 md:space-y-0 md:grid md:grid-cols-2 gap-3 md:gap-4 text-sm text-gray-600">
-          <div className="flex items-start gap-2">
-            <Info className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-            <span className="text-xs md:text-sm">
-              তারকাচিহ্নিত (*) ফিল্ডগুলি অবশ্যই পূরণ করতে হবে
-            </span>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-center md:text-left space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-xs text-white text-xs font-semibold">
+              <School className="w-3.5 h-3.5" />
+              <span>বাঁশগ্রাম উচ্চ বিদ্যালয় অ্যালামনাই নেটওয়ার্ক</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">
+              অ্যালামনাই ডিরেক্টরিতে যোগ দিন
+            </h1>
+            <p className="text-red-100 text-sm sm:text-base max-w-xl">
+              আপনার ব্যাচমেট ও প্রিয় স্কুলের সকল প্রাক্তন শিক্ষার্থীদের সাথে
+              যুক্ত হোন। জরুরি রক্তের প্রয়োজনে একে অপরের পাশে দাঁড়ান।
+            </p>
           </div>
-          <div className="flex items-start gap-2">
-            <Info className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-            <span className="text-xs md:text-sm">
-              সকল তথ্য সঠিক এবং আপ-টু-ডেট থাকা প্রয়োজন
-            </span>
-          </div>
+
+          <Link
+            href="/directory"
+            className="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white text-red-600 font-bold text-sm shadow-md hover:bg-red-50 hover:scale-105 active:scale-95 transition-all"
+          >
+            <Users className="w-4 h-4" />
+            <span>ডিরেক্টরি দেখুন</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
-        {/* Photo Upload Section */}
-        <div className="bg-gray-50 rounded-lg md:rounded-xl p-4 md:p-6">
-          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
-            <User className="w-4 h-4 md:w-5 md:h-5 text-red-600" />
-            প্রোফাইল ছবি
-          </h3>
-          <div className="flex flex-col sm:flex-row items-start gap-4 md:gap-6">
-            <div className="shrink-0 self-center sm:self-start">
-              <div className="relative">
+      {/* Success Banner */}
+      {isSuccess && (
+        <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-6 mb-8 text-emerald-900 shadow-xs animate-in fade-in duration-300">
+          <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+            <div className="p-3 bg-emerald-100 text-emerald-600 rounded-2xl shrink-0">
+              <CheckCircle2 className="w-8 h-8" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-black text-emerald-950">
+                অভিনন্দন! আপনার রেজিস্ট্রেশন সফল হয়েছে।
+              </h3>
+              <p className="text-sm text-emerald-700 mt-1">
+                আপনার তথ্য সফলভাবে ডিরেক্টরিতে যোগ করা হয়েছে। আপনি এখন অ্যালামনাই তালিকায় উপস্থিত আছেন।
+              </p>
+            </div>
+            <Link
+              href="/directory"
+              className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition-colors shrink-0"
+            >
+              ডিরেক্টরিতে নিজের নাম দেখুন &rarr;
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Main Registration Form Container */}
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-200/80 p-5 sm:p-8">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+          {/* Photo Upload Section */}
+          <div className="bg-gray-50/70 rounded-2xl p-5 border border-gray-100">
+            <h3 className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+              <User className="w-4 h-4 text-red-600" />
+              প্রোফাইল ছবি
+            </h3>
+
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+              <div className="relative shrink-0">
                 {previewUrl ? (
                   <div className="relative">
                     <img
                       src={previewUrl}
                       alt="Preview"
-                      className="w-20 h-20 md:w-24 md:h-24 rounded-xl md:rounded-2xl object-cover border-2 border-red-200"
+                      className="w-24 h-24 rounded-2xl object-cover border-2 border-red-300 shadow-xs"
                     />
                     <button
                       type="button"
                       onClick={removePhoto}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                      className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700 shadow-xs transition-colors"
+                      title="ছবি মুছুন"
                     >
-                      <X className="w-3 h-3" />
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ) : (
-                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl md:rounded-2xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
-                    <User className="w-6 h-6 md:w-8 md:h-8 text-gray-400" />
+                  <div className="w-24 h-24 rounded-2xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center bg-white text-gray-400">
+                    <User className="w-8 h-8 text-gray-300" />
+                    <span className="text-[10px] mt-1 font-medium">ছবি নেই</span>
                   </div>
                 )}
               </div>
-            </div>
 
-            <div className="grow w-full">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                প্রোফাইল ছবি (ঐচ্ছিক)
-              </label>
-              <div className="space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                  <label
-                    htmlFor="photo"
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg cursor-pointer hover:bg-red-100 transition-colors text-sm font-semibold w-full sm:w-auto"
-                  >
-                    <Upload className="w-4 h-4" />
-                    ছবি আপলোড
-                  </label>
-                  <input
-                    type="file"
-                    id="photo"
-                    name="photo"
-                    accept="image/jpeg,image/jpg,image/png,image/webp"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <span className="text-xs md:text-sm text-gray-500 text-center sm:text-left">
-                    JPEG, PNG, WebP (সর্বোচ্চ 2MB)
-                  </span>
-                </div>
+              <div className="space-y-2 text-center sm:text-left flex-1">
+                <label
+                  htmlFor="photo"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl cursor-pointer font-bold text-xs sm:text-sm border border-red-200 transition-colors shadow-2xs"
+                >
+                  <Upload className="w-4 h-4" />
+                  <span>ছবি নির্বাচন করুন</span>
+                </label>
+                <input
+                  type="file"
+                  id="photo"
+                  name="photo"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
                 <p className="text-xs text-gray-500">
-                  একটি পেশাদার প্রোফাইল ছবি আপনাকে সহজে চেনাতে সাহায্য করবে।
-                  পরিষ্কার এবং সাম্প্রতিক ছবি ব্যবহার করার চেষ্টা করুন।
+                  সর্বোচ্চ 3MB (JPEG, PNG, WebP)। একটি পরিষ্কার ও সাম্প্রতিক ছবি নির্বাচন করুন।
                 </p>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Personal Information Section */}
-        <div className="bg-gray-50 rounded-lg md:rounded-xl p-4 md:p-6">
-          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
-            <User className="w-4 h-4 md:w-5 md:h-5 text-red-600" />
-            ব্যক্তিগত তথ্য
-          </h3>
-          <div className="grid grid-cols-1 gap-3 md:gap-4">
-            <div>
-              <label
-                htmlFor="fullName"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                পুরো নাম *
-              </label>
-              <input
-                type="text"
-                id="fullName"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                required
-                placeholder="আপনার পুরো নাম লিখুন"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-sm md:text-base"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                আপনার পুরো নাম ব্যবহার করুন
-              </p>
+          {/* Section 1: Personal Details */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+              <User className="w-5 h-5 text-red-600" />
+              <h2 className="text-base sm:text-lg font-bold text-gray-900">
+                ব্যক্তিগত তথ্য
+              </h2>
             </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"
-              >
-                <Mail className="w-4 h-4" />
-                ইমেইল *
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                placeholder="example@email.com"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-sm md:text-base"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                সক্রিয় ইমেইল ঠিকানা দিন
-              </p>
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="fullName"
+                  className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
+                >
+                  পুরো নাম <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="আপনার পূর্ণ নাম লিখুন"
+                  className="w-full px-3.5 py-2.5 bg-gray-50/70 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm"
+                />
+              </div>
 
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"
-              >
-                <Phone className="w-4 h-4" />
-                ফোন নম্বর *
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                required
-                placeholder="01XXXXXXXXX"
-                pattern="[0-9]{11}"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-sm md:text-base"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                বাংলাদেশী ফোন নম্বর ফরম্যাটে দিন (11 ডিজিট)
-              </p>
-            </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
+                >
+                  ইমেইল ঠিকানা <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="example@mail.com"
+                  className="w-full px-3.5 py-2.5 bg-gray-50/70 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm"
+                />
+              </div>
 
-            <div>
-              <label
-                htmlFor="bloodGroup"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                রক্তের গ্রুপ *
-              </label>
-              <select
-                id="bloodGroup"
-                name="bloodGroup"
-                value={formData.bloodGroup}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-sm md:text-base"
-              >
-                <option value="">রক্তের গ্রুপ নির্বাচন করুন</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-              </select>
-              <p className="text-xs text-gray-500 mt-1">
-                জরুরী অবস্থায় সাহায্যের জন্য
-              </p>
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
+                >
+                  ফোন / হোয়াটসঅ্যাপ নম্বর <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="01XXXXXXXXX"
+                  className="w-full px-3.5 py-2.5 bg-gray-50/70 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="bloodGroup"
+                  className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
+                >
+                  রক্তের গ্রুপ <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="bloodGroup"
+                  name="bloodGroup"
+                  value={formData.bloodGroup}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3.5 py-2.5 bg-gray-50/70 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm cursor-pointer"
+                >
+                  <option value="">রক্তের গ্রুপ নির্বাচন করুন</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Location & Education Section */}
-        <div className="bg-gray-50 rounded-lg md:rounded-xl p-4 md:p-6">
-          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
-            <MapPin className="w-4 h-4 md:w-5 md:h-5 text-red-600" />
-            অবস্থান ও শিক্ষা
-          </h3>
-          <div className="grid grid-cols-1 gap-3 md:gap-4">
-            <div>
-              <label
-                htmlFor="currentCity"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                বর্তমান শহর *
-              </label>
-              <input
-                type="text"
-                id="currentCity"
-                name="currentCity"
-                value={formData.currentCity}
-                onChange={handleInputChange}
-                required
-                placeholder="আপনার বর্তমান ঠিকানা"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-sm md:text-base"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                যে শহরে/গ্রামে আপনি বর্তমানে থাকেন
-              </p>
+          {/* Section 2: Education & Location */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+              <MapPin className="w-5 h-5 text-red-600" />
+              <h2 className="text-base sm:text-lg font-bold text-gray-900">
+                অবস্থান ও শিক্ষা
+              </h2>
             </div>
 
-            <div>
-              <label
-                htmlFor="passingYear"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                পাস করার বছর *
-              </label>
-              <input
-                type="number"
-                id="passingYear"
-                name="passingYear"
-                value={formData.passingYear}
-                onChange={handleInputChange}
-                min="1950"
-                max="2030"
-                required
-                placeholder="২০১৬"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-sm md:text-base"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                যে বছর আপনি SSC পাস করেছেন
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="passingYear"
+                  className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
+                >
+                  পাস করার বছর (ব্যাচ) <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="passingYear"
+                  name="passingYear"
+                  value={formData.passingYear}
+                  onChange={handleInputChange}
+                  min="1960"
+                  max="2035"
+                  required
+                  placeholder="যেমন: 2016"
+                  className="w-full px-3.5 py-2.5 bg-gray-50/70 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="currentCity"
+                  className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
+                >
+                  বর্তমান শহর / ঠিকানা <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="currentCity"
+                  name="currentCity"
+                  value={formData.currentCity}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="যেমন: ঢাকা, চট্টগ্রাম, বা বাঁশগ্রাম"
+                  className="w-full px-3.5 py-2.5 bg-gray-50/70 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Professional Information Section */}
-        <div className="bg-gray-50 rounded-lg md:rounded-xl p-4 md:p-6">
-          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
-            <Briefcase className="w-4 h-4 md:w-5 md:h-5 text-red-600" />
-            পেশাগত তথ্য
-          </h3>
-          <div className="grid grid-cols-1 gap-3 md:gap-4">
-            <div>
-              <label
-                htmlFor="jobTitle"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                পদবী *
-              </label>
-              <input
-                type="text"
-                id="jobTitle"
-                name="jobTitle"
-                value={formData.jobTitle}
-                onChange={handleInputChange}
-                required
-                placeholder="উদাহরণ: ছাত্র, শিক্ষক, ব্যবসায়ী বা ইঞ্জিনিয়ার"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-sm md:text-base"
-              />
-              <p className="text-xs text-gray-500 mt-1">আপনার বর্তমান পদবী</p>
+          {/* Section 3: Professional Info */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+              <Briefcase className="w-5 h-5 text-red-600" />
+              <h2 className="text-base sm:text-lg font-bold text-gray-900">
+                পেশাগত তথ্য
+              </h2>
             </div>
 
-            <div>
-              <label
-                htmlFor="organization"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                প্রতিষ্ঠান *
-              </label>
-              <input
-                type="text"
-                id="organization"
-                name="organization"
-                value={formData.organization}
-                onChange={handleInputChange}
-                required
-                placeholder="আপনার কর্মস্থল/শিক্ষা প্রতিষ্ঠানের নাম"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-sm md:text-base"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                আপনার বর্তমান কর্মস্থল/কোম্পানি/শিক্ষা প্রতিষ্ঠান
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="jobTitle"
+                  className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
+                >
+                  পদবী / পেশা <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="jobTitle"
+                  name="jobTitle"
+                  value={formData.jobTitle}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="যেমন: সফটওয়্যার প্রকৌশলী, শিক্ষার্থী, শিক্ষক"
+                  className="w-full px-3.5 py-2.5 bg-gray-50/70 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="organization"
+                  className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
+                >
+                  প্রতিষ্ঠান / বিশ্ববিদ্যালয় <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="organization"
+                  name="organization"
+                  value={formData.organization}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="আপনার কর্মস্থল বা শিক্ষা প্রতিষ্ঠানের নাম"
+                  className="w-full px-3.5 py-2.5 bg-gray-50/70 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Quote Section */}
-        <div className="bg-gray-50 rounded-lg md:rounded-xl p-4 md:p-6">
-          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">
-            প্রিয় উক্তি (ঐচ্ছিক)
-          </h3>
-          <div>
+          {/* Section 4: Quote (Optional) */}
+          <div className="space-y-2">
             <label
               htmlFor="quote"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-xs sm:text-sm font-semibold text-gray-700"
             >
-              আপনার প্রিয় একটি উক্তি শেয়ার করুন
+              প্রিয় উক্তি বা স্কুলের স্মৃতি (ঐচ্ছিক)
             </label>
             <textarea
               id="quote"
@@ -451,55 +460,36 @@ export default function AlumniRegistrationForm() {
               value={formData.quote}
               onChange={handleInputChange}
               rows={3}
-              placeholder="জীবনকে অনুপ্রাণিত করে এমন একটি উক্তি লিখুন..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all resize-none text-sm md:text-base"
+              placeholder="জীবন বা প্রিয় বিদ্যালয় সম্পর্কে আপনার একটি প্রিয় বাণী..."
+              className="w-full px-3.5 py-2.5 bg-gray-50/70 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all text-sm resize-none"
             />
-            <p className="text-xs text-gray-500 mt-1">
-              এটি আপনার প্রোফাইলকে আরও ব্যক্তিগত এবং আকর্ষণীয় করবে
-            </p>
           </div>
-        </div>
 
-        {/* Submit Button */}
-        <div className="bg-green-50 rounded-lg md:rounded-xl p-4 md:p-6 border border-green-200">
-          <div className="text-center">
-            <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2">
-              রেজিস্ট্রেশন সম্পন্ন করুন
-            </h3>
-            <p className="text-xs md:text-sm text-gray-600 mb-4">
-              সকল তথ্য সঠিকভাবে পূরণ হয়েছে কিনা যাচাই করুন। সাবমিট করার পর
-              আপনার তথ্য আমাদের ডাটাবেসে সংরক্ষিত হবে।
-            </p>
+          {/* Submit Action */}
+          <div className="pt-4 border-t border-gray-100">
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-red-500 text-white py-3 px-4 rounded-lg font-semibold hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 md:hover:scale-105 flex items-center justify-center gap-2"
+              className="w-full py-4 px-6 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white rounded-2xl font-black text-base shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer active:scale-98"
             >
               {isLoading ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  রেজিস্ট্রেশন করা হচ্ছে...
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+                  <span>তথ্য জমা দেওয়া হচ্ছে...</span>
                 </>
               ) : (
-                "এলামনাই ডিরেক্টরিতে যোগ দিন"
+                <>
+                  <Sparkles className="w-5 h-5" />
+                  <span>রেজিস্ট্রেশন সম্পন্ন করুন</span>
+                </>
               )}
             </button>
-
-            {/* Environment Warning */}
-            {!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME && (
-              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <div className="flex items-center gap-2 text-yellow-800">
-                  <AlertCircle className="w-4 h-4" />
-                  <span className="text-xs">
-                    ছবি আপলোড সার্ভিস বর্তমানে unavailable। আপনি এখনও
-                    রেজিস্ট্রেশন করতে পারেন।
-                  </span>
-                </div>
-              </div>
-            )}
+            <p className="text-center text-xs text-gray-400 mt-2.5">
+              সকল তথ্য সুরক্ষিত থাকবে এবং শুধুমাত্র প্রাক্তন শিক্ষার্থীদের যোগাযোগে ব্যবহৃত হবে।
+            </p>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

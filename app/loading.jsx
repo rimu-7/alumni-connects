@@ -1,42 +1,49 @@
-import { BookOpen } from "lucide-react";
+import React from "react";
 
-export default function Loading() {
+export default function GlobalLoading() {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
-      <div className="absolute inset-0 opacity-90" />
-
-      <div className="relative z-10 flex flex-col items-center space-y-10">
-        <div className="relative">
-          <div className="animate-pulse">
-            <BookOpen className="w-24 h-24 md:w-32 md:h-32 text-red-600" />
-          </div>
-
-          <div className="absolute -inset-12 md:-inset-16">
-            <div className="h-full w-full rounded-full border-8 border-transparent border-t-red-500 border-r-orange-500 border-b-red-400 border-l-orange-400 animate-spin"></div>
-          </div>
-
-          <div className="absolute -inset-20 md:-inset-24">
-            <div className="h-full w-full rounded-full border-4 border-dashed border-red-200 opacity-40 animate-spin" style={{ animationDirection: "reverse", animationDuration: "10s" }}></div>
-          </div>
+    <div className="min-h-[80vh] py-8 px-4 flex justify-center items-start">
+      <div className="w-full max-w-4xl space-y-6 animate-pulse">
+        {/* Banner Skeleton */}
+        <div className="h-36 bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl border border-red-100 flex flex-col items-center justify-center space-y-3 p-6">
+          <div className="w-12 h-12 bg-red-200/70 rounded-full" />
+          <div className="h-6 w-72 bg-red-200/60 rounded-md" />
+          <div className="h-4 w-48 bg-red-100 rounded-md" />
         </div>
 
-        <div className="text-center space-y-4 py-20">
-          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 tracking-tight">
-            বাঁশগ্রাম হাইস্কুল অ্যালামনাই
-          </h2>
-          <p className="text-lg md:text-xl text-gray-700 font-medium">
-            অ্যালামনাই ডিরেক্টরি লোড হচ্ছে...
-          </p>
-        </div>
+        {/* Form Card Skeleton */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 space-y-6 shadow-xs">
+          {/* Section 1 */}
+          <div className="space-y-4">
+            <div className="h-5 w-36 bg-gray-200 rounded-md" />
+            <div className="flex gap-4 items-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-2xl border border-dashed border-gray-300" />
+              <div className="space-y-2 flex-1">
+                <div className="h-9 w-36 bg-gray-200 rounded-lg" />
+                <div className="h-3 w-48 bg-gray-100 rounded-md" />
+              </div>
+            </div>
+          </div>
 
-        <div className="flex space-x-3">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="w-4 h-4 bg-red-500 rounded-full animate-bounce"
-              style={{ animationDelay: `${i * 150}ms` }}
-            />
-          ))}
+          {/* Section 2: Input fields */}
+          <div className="space-y-4 pt-4 border-t border-gray-100">
+            <div className="h-5 w-32 bg-gray-200 rounded-md" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="h-4 w-20 bg-gray-200 rounded-md" />
+                <div className="h-10 w-full bg-gray-100 rounded-lg border border-gray-200" />
+              </div>
+              <div className="space-y-2">
+                <div className="h-4 w-24 bg-gray-200 rounded-md" />
+                <div className="h-10 w-full bg-gray-100 rounded-lg border border-gray-200" />
+              </div>
+            </div>
+          </div>
+
+          {/* Button skeleton */}
+          <div className="pt-4">
+            <div className="h-12 w-full bg-red-400/40 rounded-xl" />
+          </div>
         </div>
       </div>
     </div>
